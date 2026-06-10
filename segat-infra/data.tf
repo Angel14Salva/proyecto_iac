@@ -10,14 +10,14 @@ resource "aws_db_subnet_group" "rds" {
 }
 
 resource "aws_rds_cluster" "aurora_postgresql" {
-  cluster_identifier     = "${var.project_name}-aurora-cluster"
-  engine                 = "aurora-postgresql"
-  engine_version         = "15.4"
-  database_name          = var.db_name
-  master_username        = var.db_username
-  master_password        = var.db_password
-  db_subnet_group_name   = aws_db_subnet_group.rds.name
-  vpc_security_group_ids = [aws_security_group.rds.id]
+  cluster_identifier      = "${var.project_name}-aurora-cluster"
+  engine                  = "aurora-postgresql"
+  engine_version          = "15.4"
+  database_name           = var.db_name
+  master_username         = var.db_username
+  master_password         = var.db_password
+  db_subnet_group_name    = aws_db_subnet_group.rds.name
+  vpc_security_group_ids  = [aws_security_group.rds.id]
   backup_retention_period = 30
   preferred_backup_window = "03:00-04:00"
   deletion_protection     = false
@@ -70,9 +70,22 @@ resource "aws_dynamodb_table" "gps_locations" {
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "reporte_id"
   range_key    = "timestamp"
-  attribute { name = "reporte_id", type = "S" }
-  attribute { name = "timestamp",  type = "S" }
-  ttl { attribute_name = "expiration_time", enabled = true }
+
+  attribute {
+    name = "reporte_id"
+    type = "S"
+  }
+
+  attribute {
+    name = "timestamp"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "expiration_time"
+    enabled        = true
+  }
+
   tags = { Name = "${var.project_name}-dynamodb-gps" }
 }
 
@@ -81,8 +94,17 @@ resource "aws_dynamodb_table" "notifications" {
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "notification_id"
   range_key    = "user_id"
-  attribute { name = "notification_id", type = "S" }
-  attribute { name = "user_id",         type = "S" }
+
+  attribute {
+    name = "notification_id"
+    type = "S"
+  }
+
+  attribute {
+    name = "user_id"
+    type = "S"
+  }
+
   tags = { Name = "${var.project_name}-dynamodb-notifications" }
 }
 
